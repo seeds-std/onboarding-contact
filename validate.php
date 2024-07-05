@@ -32,8 +32,8 @@ function validate($request) {
     if ($request['prefecture'] === '') {
         $error_messages[] = '都道府県は必須です';
     }
-    if (! is_numeric($request['prefecture'])) {
-        $error_messages = '都道府県は数値で入力してください';
+    if (! is_string($request['prefecture'])) {
+        $error_messages = '都道府県は文字列で入力してください';
     }
 
     if ($request['address1'] === '') {

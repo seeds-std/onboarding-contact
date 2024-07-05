@@ -1,119 +1,52 @@
 <?php
 
-enum Prefecture: int
+enum Prefecture: string
 {
-    case HOKKAIDO = 1;
-    case AOMORI = 2;
-    case IWATE = 3;
-    case MIYAGI = 4;
-    case AKITA = 5;
-    case YAMAGATA = 6;
-    case FUKUSHIMA = 7;
-    case IBARAKI = 8;
-    case TOCHIGI = 9;
-    case GUNMA = 10;
-    case SAITAMA = 11;
-    case TIBA = 12;
-    case TOKYO = 13;
-    case KANAGAWA = 14;
-    case NIIGATA = 15;
-    case TOYAMA = 16;
-    case ISHIKAWA = 17;
-    case FUKUI = 18;
-    case YAMANASHI = 19;
-    case NAGANO = 20;
-    case GIFU = 21;
-    case SHIZUOKA = 22;
-    case AICHI = 23;
-    case MIE = 24;
-    case SHIGA = 25;
-    case KYOTO = 26;
-    case OSAKA = 27;
-    case HYOGO = 28;
-    case NARA = 29;
-    case WAKAYAMA = 30;
-    case TOTTORI = 31;
-    case SHIMANE = 32;
-    case OKAYAMA = 33;
-    case HIROSHIMA = 34;
-    case YAMAGUCHI = 35;
-    case TOKUSHIMA = 36;
-    case KAGAWA = 37;
-    case EHIME = 38;
-    case KOCHI = 39;
-    case FUKUOKA = 40;
-    case SAGA = 41;
-    case NAGASAKI = 42;
-    case KUMAMOTO = 43;
-    case OITA = 44;
-    case MIYAZAKI = 45;
-    case KAGOSHIMA = 46;
-    case OKINAWA = 47;
-
-    /**
-     * 日本語名を取得する
-     */
-    public static function getJapaneseNames(): array
-    {
-        $names = [];
-        foreach (self::cases() as $case) {
-            $names[$case->value] = $case->toJapanese();
-        }
-
-        return $names;
-    }
-
-
-    public function toJapanese(): string
-    {
-        return match ($this) {
-            self::HOKKAIDO => '北海道',
-            self::AOMORI => '青森県',
-            self::IWATE => '岩手県',
-            self::MIYAGI => '宮城県',
-            self::AKITA => '秋田県',
-            self::YAMAGATA => '山形県',
-            self::FUKUSHIMA => '福島県',
-            self::IBARAKI => '茨城県',
-            self::TOCHIGI => '栃木県',
-            self::GUNMA => '群馬県',
-            self::SAITAMA => '埼玉県',
-            self::TIBA => '千葉県',
-            self::TOKYO => '東京都',
-            self::KANAGAWA => '神奈川県',
-            self::NIIGATA => '新潟県',
-            self::TOYAMA => '富山県',
-            self::ISHIKAWA => '石川県',
-            self::FUKUI => '福井県',
-            self::YAMANASHI => '山梨県',
-            self::NAGANO => '長野県',
-            self::GIFU => '岐阜県',
-            self::SHIZUOKA => '静岡県',
-            self::AICHI => '愛知県',
-            self::MIE => '三重県',
-            self::SHIGA => '滋賀県',
-            self::KYOTO => '京都府',
-            self::OSAKA => '大阪府',
-            self::HYOGO => '兵庫県',
-            self::NARA => '奈良県',
-            self::WAKAYAMA => '和歌山県',
-            self::TOTTORI => '鳥取県',
-            self::SHIMANE => '島根県',
-            self::OKAYAMA => '岡山県',
-            self::HIROSHIMA => '広島県',
-            self::YAMAGUCHI => '山口県',
-            self::TOKUSHIMA => '徳島県',
-            self::KAGAWA => '香川県',
-            self::EHIME => '愛媛県',
-            self::KOCHI => '高知県',
-            self::FUKUOKA => '福岡県',
-            self::SAGA => '佐賀県',
-            self::NAGASAKI => '長崎県',
-            self::KUMAMOTO => '熊本県',
-            self::OITA => '大分県',
-            self::MIYAZAKI => '宮崎県',
-            self::KAGOSHIMA => '鹿児島県',
-            self::OKINAWA => '沖縄県'
-        };
-    }
+    case HOKKAIDO = '北海道';
+    case AOMORI = '青森県';
+    case IWATE = '岩手県';
+    case MIYAGI = '宮城県';
+    case AKITA = '秋田県';
+    case YAMAGATA = '山形県';
+    case FUKUSHIMA = '福島県';
+    case IBARAKI = '茨城県';
+    case TOCHIGI = '栃木県';
+    case GUNMA = '群馬県';
+    case SAITAMA = '埼玉県';
+    case CHIBA = '千葉県';
+    case TOKYO = '東京都';
+    case KANAGAWA = '神奈川県';
+    case NIIGATA = '新潟県';
+    case TOYAMA = '富山県';
+    case ISHIKAWA = '石川県';
+    case FUKUI = '福井県';
+    case YAMANASHI = '山梨県';
+    case NAGANO = '長野県';
+    case GIFU = '岐阜県';
+    case SHIZUOKA = '静岡県';
+    case AICHI = '愛知県';
+    case MIE = '三重県';
+    case SHIGA = '滋賀県';
+    case KYOTO = '京都府';
+    case OSAKA = '大阪府';
+    case HYOGO = '兵庫県';
+    case NARA = '奈良県';
+    case WAKAYAMA = '和歌山県';
+    case TOTTORI = '鳥取県';
+    case SHIMANE = '島根県';
+    case OKAYAMA = '岡山県';
+    case HIROSHIMA = '広島県';
+    case YAMAGUCHI = '山口県';
+    case TOKUSHIMA = '徳島県';
+    case KAGAWA = '香川県';
+    case EHIME = '愛媛県';
+    case KOCHI = '高知県';
+    case FUKUOKA = '福岡県';
+    case SAGA = '佐賀県';
+    case NAGASAKI = '長崎県';
+    case KUMAMOTO = '熊本県';
+    case OITA = '大分県';
+    case MIYAZAKI = '宮崎県';
+    case KAGOSHIMA = '鹿児島県';
+    case OKINAWA = '沖縄県';
 }

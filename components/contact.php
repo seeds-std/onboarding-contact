@@ -40,7 +40,7 @@
                 <select class="right" name="prefecture" id="prefecture" <? if ($is_submit && $old_request['prefecture'] === 'female') echo 'checked' ?> required>
                     <option class="bold" value="" selected>選択してください</option>
                     <? foreach (Prefecture::cases() as $prefecture): ?>
-                        <option value="<? echo $prefecture->value ?>" <? if ($is_submit && $old_request['prefecture'] == $prefecture->value) echo 'selected' ?>><? echo $prefecture->toJapanese() ?></option>
+                        <option value="<? echo $prefecture->value ?>" <? if ($is_submit && $old_request['prefecture'] == $prefecture->value) echo 'selected' ?>><? echo $prefecture->value ?></option>
                     <? endforeach; ?>
                 </select>
             </td>
