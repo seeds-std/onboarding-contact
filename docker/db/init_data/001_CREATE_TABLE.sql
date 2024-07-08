@@ -1,5 +1,6 @@
 -- contactsテールブルを作成
 CREATE TABLE IF NOT EXISTS contacts (
+    -- 最後の行にカンマがあるとエラーになる
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     kana VARCHAR(50) NOT NULL,
@@ -10,6 +11,5 @@ CREATE TABLE IF NOT EXISTS contacts (
     address1 VARCHAR(200) NOT NULL,
     address2 VARCHAR(200) NOT NULL,
     building_name VARCHAR(200),
-    contact VARCHAR(1000) NOT NULL,
-    sources VARCHAR(100) -- 最後にカンマをつけるとエラーになる
+    contact VARCHAR(1000) NOT NULL
 );
