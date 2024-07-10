@@ -16,7 +16,13 @@ services:
     build:
       context: docker/web
       dockerfile: Dockerfile
+    hostname: webhost # 50秒かかるため
     volumes:
       - ./:/var/www/html
+      - ./docker/web/hosts:/etc/hosts
     ports:
       - "80:80"
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"

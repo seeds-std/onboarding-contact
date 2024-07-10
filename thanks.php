@@ -48,12 +48,29 @@ try {
     $connection->commit();
 } catch (Exception $e) {
     $connection->rollback();
-    echo 'エラーが発生しました。';
+    echo $e->getMessage();
 }
-
 
 $statement->close();
 $connection->close();
+
+// mbstringの設定
+mb_language("Japanese");
+mb_internal_encoding("UTF-8");
+
+$subject = '問い合わせ内容';
+$message = $_POST['contact'] . "\r\n";
+
+$headers = "From: noreply@example.com\r\n";
+$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+$headers .= "Content-Transfer-Encoding: 7bit\r\n";
+
+if (mb_send_mail($_POST['email'], $subject, $message, $headers)) {
+    echo '登録完了メールを送信しました。';
+} else {
+    echo 'メールの送信に失敗しました。';
+}
+
 ?>
 
 <!-- 描画するHTML -->
