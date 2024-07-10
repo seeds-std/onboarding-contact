@@ -16,6 +16,8 @@ services:
     build:
       context: docker/web
       dockerfile: Dockerfile
+    environment:
+      - MAILHOG_HOST=mailhog
     hostname: webhost # 50秒かかるため
     volumes:
       - ./:/var/www/html

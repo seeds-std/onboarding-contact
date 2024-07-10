@@ -4,7 +4,11 @@
 require_once __DIR__ . '/private/helper.php';
 require_once __DIR__ . '/private/database.php';
 require_once __DIR__ . '/validate.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+// Composerのオートローダーを読み込む
+require 'vendor/autoload.php';
 
 
 // 実装
@@ -54,24 +58,27 @@ try {
 $statement->close();
 $connection->close();
 
-// mbstringの設定
-mb_language("Japanese");
-mb_internal_encoding("UTF-8");
 
-$subject = '問い合わせ内容';
-$message = $_POST['contact'] . "\r\n";
+$mail = new PHPMailer(true);
+try {
+    // サーバ設定
+    $mail->isSMTP();
+    $mail->Host = getenv('MAILHOG_HOST');  // MailHogコンテナのホスト名
+    $mail->Port = 1025;  // MailHogのSMTPポート
+    $mail->SMTPAuth = false; // SMTP認証なし
+    // 文字エンコーディングを設定
+    $mail->CharSet = 'UTF-8';
 
-$headers = "From: noreply@example.com\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "Content-Transfer-Encoding: 7bit\r\n";
+    $mail->setFrom('from@example.com'); // 送信元メールアドレス
+    $mail->addAddress($_POST['email']); // 送信先メールアドレス
 
-if (mb_send_mail($_POST['email'], $subject, $message, $headers)) {
-    echo '登録完了メールを送信しました。';
-} else {
-    echo 'メールの送信に失敗しました。';
+    $mail->isHTML(true);
+    $mail->Subject = '問い合わせ内容';
+    $mail->Body = $_POST['contact'];
+
+    $mail->send();
+    echo 'メールを送信しました。お問い合わせありがとうございました。';
+} catch (Exception $e) {
+    echo "メールを送信できませんでした。 {$mail->ErrorInfo}";
 }
-
 ?>
-
-<!-- 描画するHTML -->
-お問い合わせありがとうございました。
