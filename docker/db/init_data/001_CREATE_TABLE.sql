@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS contacts (
     address1 VARCHAR(200) NOT NULL,
     address2 VARCHAR(200) NOT NULL,
     building_name VARCHAR(200),
-    contact VARCHAR(1000) NOT NULL
+    contact VARCHAR(1000) NOT NULL,
+    sources VARCHAR(100)
 );
