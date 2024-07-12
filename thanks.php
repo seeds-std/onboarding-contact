@@ -18,7 +18,6 @@ foreach ($_POST['sources'] as $source) {
 }
 // 最後のカンマを削除する
 $sources = rtrim($sources, ',');
-$prefecture = intval($_POST['prefecture']);
 $zip_code = $_POST['zip_code1'] . $_POST['zip_code2'];
 
 $error_message = validate($_POST);
@@ -31,13 +30,13 @@ $connection = connectDB();
 $sql = "INSERT INTO contacts (name, kana, email, gender, zip_code, prefecture, address1, address2, building_name, contact, sources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $statement = $connection->prepare($sql);
 $statement->bind_param(
-    'sssisisssss',
+    'sssisssssss',
     $_POST['name'],
     $_POST['kana'],
     $_POST['email'],
     $_POST['gender'],
     $zip_code,
-    $prefecture,
+    $_POST['prefecture'],
     $_POST['address1'],
     $_POST['address2'],
     $_POST['building_name'],

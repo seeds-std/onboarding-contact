@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     email VARCHAR(100) NOT NULL,
     gender TINYINT NOT NULL,
     zip_code VARCHAR(7) NOT NULL,
-    prefecture int NOT NULL,
+    prefecture VARCHAR(10) NOT NULL,
     address1 VARCHAR(200) NOT NULL,
     address2 VARCHAR(200) NOT NULL,
     building_name VARCHAR(200),
