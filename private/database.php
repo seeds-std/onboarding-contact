@@ -19,12 +19,25 @@ define('DB_PASSWORD', 'password');
  *
  * @return mysqli|void
  */
-function connectDB()
-{
-    $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT);
-    if ($connection->error) {
-        die("Connection failed: " . $connection->connect_error);
+
+$dsn = 'mysql:dbname=bbs;host=db';
+$user = 'user';
+$password = 'password';
+
+try{
+    $pdo = new PDO($dsn, $user, $password, [
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //連想配列
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, //例外
+        PDO::ATTR_EMULATE_PREPARES => false, //SQLインジェクション対策
+    ]);
+    
+    } catch(PDOException $e){
+    echo '接続失敗' . $e->getMessage() . "\n";
+    exit();
     }
 
-    return $connection;
-}
+// データを挿入する準備文を作成
+$stmt = $pdo->prepare("INSERT INTO contacts (fullname, Kana, email, gender, zip, prefs, municipalities,FurtherDivisions, building, comment, checks)
+VALUES (:fullname, :kana, :email, :gender, :zip, :prefs, :municipalities, :FurtherDivisions, :building, :comment, :checks)");
+
+?>
