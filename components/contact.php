@@ -2,7 +2,7 @@
     echo '<p class="error-message">' . $message . '</p>';
 } ?>
 
-<form action="./index.php" method="GET">
+<form action="./index.php" method="POST">
     <table class="table">
         <tr>
             <p><span class="reference-mark">※</span>内容は必須項目です</p>

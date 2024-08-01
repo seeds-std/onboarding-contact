@@ -10,13 +10,13 @@ require_once 'enums/prefecture.php';
 // 実装
 $is_error = false;
 $error_message = [];
-$is_submit = count($_GET) > 0;
+$is_submit = count($_POST) > 0;
 if ($is_submit) {
-    $error_message = validate($_GET);
+    $error_message = validate($_POST);
     $is_error = count($error_message) > 0;
 }
-$is_sources_exists = array_key_exists('sources', $_GET);
-$old_request = count($error_message) > 0 ? $_GET : [];
+$is_sources_exists = array_key_exists('sources', $_POST);
+$old_request = count($error_message) > 0 ? $_POST : [];
 
 ?>
 
