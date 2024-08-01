@@ -1,7 +1,7 @@
 <?php
 
-enum Gender: int
+enum Gender: string
 {
-    case FEMALE = 1;
-    case MALE = 2;
+    case FEMALE = '女性';
+    case MALE = '男性';
 }

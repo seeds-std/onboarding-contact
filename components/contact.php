@@ -22,8 +22,8 @@
         <tr>
             <th>性別<span class="reference-mark">※</span></th>
             <td>
-                <input class="right" type="radio" id="female" name="gender" value="1" <? if ($is_submit && $old_request['gender'] == '1') echo 'checked' ?>><label for="female">女性</label>
-                <input type="radio" id="male" name="gender" value="2" <? if ($is_submit && $old_request['gender'] == '2') echo 'checked' ?>><label for="male">男性</label><br>
+                <input class="right" type="radio" id="female" name="gender" value="女性" checked <? if ($is_submit && $old_request['gender'] == '女性') echo 'checked' ?>><label for="female">女性</label>
+                <input type="radio" id="male" name="gender" value="男性" <? if ($is_submit && $old_request['gender'] == '男性') echo 'checked' ?>><label for="male">男性</label><br>
             </td>
         </tr>
         <tr>

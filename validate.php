@@ -25,8 +25,8 @@ function validate($request) {
     if ($request['gender'] === '') {
         $error_messages[] = '性別は必須です';
     }
-    if (! is_numeric($request['gender'])) {
-        $error_messages[] = '性別は数値で入力してください';
+    if (! is_string($request['gender'])) {
+        $error_messages[] = '性別は文字列で入力してください';
     }
 
     if ($request['prefecture'] === '') {

@@ -30,7 +30,7 @@ $connection = connectDB();
 $sql = "INSERT INTO contacts (name, kana, email, gender, zip_code, prefecture, address1, address2, building_name, contact, sources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $statement = $connection->prepare($sql);
 $statement->bind_param(
-    'sssisssssss',
+    'sssssssssss',
     $_POST['name'],
     $_POST['kana'],
     $_POST['email'],
