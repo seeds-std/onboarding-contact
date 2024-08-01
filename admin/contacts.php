@@ -72,7 +72,7 @@ $connection->close();
                     <td><?= htmlspecialchars($contact['address1']) ?></td>
                     <td><?= htmlspecialchars($contact['address2']) ?></td>
                     <td><?= htmlspecialchars($contact['building_name']) ?></td>
-                    <td><?= htmlspecialchars($contact['contact']) ?></td>
+                    <td><?= nl2br(htmlspecialchars($contact['contact'])) ?></td>
                     <td><?= htmlspecialchars(str_replace(',', '、', $contact['sources'])) ?></td>
                 </tr>
             <?php endforeach; ?>
