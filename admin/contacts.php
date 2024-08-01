@@ -1,7 +1,6 @@
 <?php
 require_once './../private/bootstrap.php';
 require_once './../private/database.php';
-require_once './../enums/Prefecture.php';
 
 $connection = connectDB();
 $sql = "SELECT * FROM contacts";
@@ -9,7 +8,23 @@ $statement = $connection->prepare($sql);
 $statement->execute();
 $contacts = $statement->get_result()->fetch_all(MYSQLI_ASSOC);
 $statement->close();
+
+$sql = "SELECT * FROM sources";
+$statement = $connection->prepare($sql);
+$statement->execute();
+$sources = $statement->get_result()->fetch_all(MYSQLI_ASSOC);
+$statement->close();
 $connection->close();
+
+foreach ($contacts as &$contact) {
+    $contact['sources'] = [];
+    foreach ($sources as $source) {
+        if ($contact['id'] === $source['contact_id']) {
+            $contact['sources'][] = $source['source'];
+        }
+    }
+}
+unset($contact); // 参照を解除
 
 ?>
 <!DOCTYPE html>
@@ -73,7 +88,11 @@ $connection->close();
                     <td><?= htmlspecialchars($contact['address2']) ?></td>
                     <td><?= htmlspecialchars($contact['building_name']) ?></td>
                     <td><?= nl2br(htmlspecialchars($contact['contact'])) ?></td>
-                    <td><?= htmlspecialchars(str_replace(',', '、', $contact['sources'])) ?></td>
+                    <td>
+                        <?php foreach ($contact['sources'] as $source): ?>
+                            <?= htmlspecialchars($source) ?><br>
+                        <?php endforeach; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

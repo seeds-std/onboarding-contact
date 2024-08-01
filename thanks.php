@@ -7,17 +7,8 @@ require_once __DIR__ . '/validate.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Composerのオートローダーを読み込む
 require 'vendor/autoload.php';
 
-
-// 選択されたソースをカンマ区切りで結合する
-$sources = '';
-foreach ($_POST['sources'] as $source) {
-    $sources .= $source . ',';
-}
-// 最後のカンマを削除する
-$sources = rtrim($sources, ',');
 $zip_code = $_POST['zip_code1'] . $_POST['zip_code2'];
 
 $error_message = validate($_POST);
@@ -27,25 +18,40 @@ if ($is_error) {
 }
 
 $connection = connectDB();
-$sql = "INSERT INTO contacts (name, kana, email, gender, zip_code, prefecture, address1, address2, building_name, contact, sources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$statement = $connection->prepare($sql);
-$statement->bind_param(
-    'sssssssssss',
-    $_POST['name'],
-    $_POST['kana'],
-    $_POST['email'],
-    $_POST['gender'],
-    $zip_code,
-    $_POST['prefecture'],
-    $_POST['address1'],
-    $_POST['address2'],
-    $_POST['building_name'],
-    $_POST['contact'],
-    $sources
-);
+$connection->begin_transaction();
+try {
+    $sql = "INSERT INTO contacts (name, kana, email, gender, zip_code, prefecture, address1, address2, building_name, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $statement = $connection->prepare($sql);
+    $statement->bind_param(
+        'ssssssssss',
+        $_POST['name'],
+        $_POST['kana'],
+        $_POST['email'],
+        $_POST['gender'],
+        $zip_code,
+        $_POST['prefecture'],
+        $_POST['address1'],
+        $_POST['address2'],
+        $_POST['building_name'],
+        $_POST['contact'],
+    );
+    $statement->execute();
+    $statement->close();
 
-$statement->execute();
-$statement->close();
+    $sql = "INSERT INTO sources (contact_id, source) VALUES (?, ?)";
+    $statement = $connection->prepare($sql);
+    $contact_id = $connection->insert_id;
+    foreach ($_POST['sources'] as $source) {
+        $statement->bind_param('is', $contact_id, $source);
+        $statement->execute();
+    }
+    $statement->close();
+
+    $connection->commit();
+} catch (Exception $e) {
+    $connection->rollback();
+    echo 'エラーが発生しました。';
+}
 $connection->close();
 
 $mail = new PHPMailer(true);
