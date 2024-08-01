@@ -18,11 +18,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - MAILHOG_HOST=mailhog
-    hostname: webhost # 50秒かかるため
     command: /bin/bash -c  "composer install && apachectl -D FOREGROUND"
     volumes:
       - ./:/var/www/html
-      - ./docker/web/hosts:/etc/hosts
     ports:
       - "80:80"
   mailhog:
