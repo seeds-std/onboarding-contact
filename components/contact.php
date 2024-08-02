@@ -64,11 +64,9 @@
         <tr>
             <th>このフォームを知った経由<br>（複数選択可）</th>
             <td>
-                <input class="right" type="checkbox" name="sources[]" id="family" value="家族から聞いて" <? if (array_key_exists('sources', $old_request) && in_array('家族から聞いて', $old_request['sources'])) echo 'checked' ?>><label for="family">家族から聞いて</label><br>
-                <input class="right" type="checkbox" name="sources[]" id="friends" value="友達から聞いて" <? if (array_key_exists('sources', $old_request) && in_array('友達から聞いて', $old_request['sources'])) echo 'checked' ?>><label for="friends">友達から聞いて</label><br>
-                <input class="right" type="checkbox" name="sources[]" id="newspaper" value="新聞" <? if (array_key_exists('sources', $old_request) && in_array('新聞', $old_request['sources'])) echo 'checked' ?>><label for="newspaper">新聞</label><br>
-                <input class="right" type="checkbox" name="sources[]" id="radio" value="ラジオ" <? if (array_key_exists('sources', $old_request) && in_array('ラジオ', $old_request['sources'])) echo 'checked' ?>><label for="radio">ラジオ</label><br>
-                <input class="right" type="checkbox" name="sources[]" id="web" value="Web" <? if (array_key_exists('sources', $old_request) && in_array('Web', $old_request['sources'])) echo 'checked' ?>><label for="web">Web</label>
+                <? foreach (Source::cases() as $source): ?>
+                    <input class="right" type="checkbox" name="sources[]" id="<? echo $source->value ?>" value="<? echo $source->value ?>" <? if (array_key_exists('sources', $old_request) && in_array("<? echo $source->value ?>", $old_request['sources'])) echo 'checked' ?>><label for="<? echo $source->value ?>"><? echo $source->value ?></label><br>
+                <? endforeach; ?>
             </td>
         </tr>
     </table>
