@@ -22,7 +22,7 @@
         <tr>
             <th>性別<span class="reference-mark">※</span></th>
             <td>
-                <input class="right" type="radio" id="female" name="gender" value="女性" checked <? if ($is_submit && $old_request['gender'] == '女性') echo 'checked' ?>><label for="female">女性</label>
+                <input class="right" type="radio" id="female" name="gender" value="女性" checked><label for="female">女性</label>
                 <input type="radio" id="male" name="gender" value="男性" <? if ($is_submit && $old_request['gender'] == '男性') echo 'checked' ?>><label for="male">男性</label><br>
             </td>
         </tr>
@@ -37,7 +37,7 @@
         <tr>
             <th>住所（都道府県）<span class="reference-mark">※</span></th>
             <td>
-                <select class="right" name="prefecture" id="prefecture" <? if ($is_submit && $old_request['prefecture'] === 'female') echo 'checked' ?> required>
+                <select class="right" name="prefecture" id="prefecture" required>
                     <option class="bold" value="" selected>選択してください</option>
                     <? foreach (Prefecture::cases() as $prefecture): ?>
                         <option value="<? echo $prefecture->value ?>" <? if ($is_submit && $old_request['prefecture'] == $prefecture->value) echo 'selected' ?>><? echo $prefecture->value ?></option>
