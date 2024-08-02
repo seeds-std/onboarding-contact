@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <th>お問い合わせ内容</th>
-            <td><span class="right"><br><? echo nl2br(htmlspecialchars($_POST['contact'])) ?></span></td>
+            <td><span class="right confirm-contact"><? echo nl2br(htmlspecialchars($_POST['contact'])) ?></span></td>
             <input type="hidden" name="contact" value="<? echo htmlspecialchars($_POST['contact']) ?>">
         </tr>
         <tr>

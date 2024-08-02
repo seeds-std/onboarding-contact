@@ -68,3 +68,7 @@ body {
 .confirm-btn:hover {
     background-color: #00CCFF;
 }
+
+.confirm-contact {
+  display: block; /* 問い合わせ内容の行頭を揃えるため */
+}
