@@ -6,6 +6,7 @@ require_once 'private/bootstrap.php';
 require_once 'private/database.php';
 require_once 'validate.php';
 require_once 'enums/prefecture.php';
+require_once 'enums/Source.php';
 
 // 実装
 $is_error = false;
