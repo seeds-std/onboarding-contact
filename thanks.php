@@ -38,14 +38,16 @@ try {
     $statement->execute();
     $statement->close();
 
-    $sql = "INSERT INTO sources (contact_id, source) VALUES (?, ?)";
-    $statement = $connection->prepare($sql);
-    $contact_id = $connection->insert_id;
-    foreach ($_POST['sources'] as $source) {
-        $statement->bind_param('is', $contact_id, $source);
-        $statement->execute();
+    if (isset($_POST['sources'])) {
+        $sql = "INSERT INTO sources (contact_id, source) VALUES (?, ?)";
+        $statement = $connection->prepare($sql);
+        $contact_id = $connection->insert_id;
+        foreach ($_POST['sources'] as $source) {
+            $statement->bind_param('is', $contact_id, $source);
+            $statement->execute();
+        }
+        $statement->close();
     }
-    $statement->close();
 
     $connection->commit();
 } catch (Exception $e) {
