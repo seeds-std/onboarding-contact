@@ -16,7 +16,14 @@ services:
     build:
       context: docker/web
       dockerfile: Dockerfile
+    environment:
+      - MAILHOG_HOST=mailhog
+    command: /bin/bash -c  "composer install && apachectl -D FOREGROUND"
     volumes:
       - ./:/var/www/html
     ports:
       - "80:80"
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
