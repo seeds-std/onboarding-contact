@@ -62,7 +62,6 @@ try {
     $mail->isSMTP();
     $mail->Host = getenv('MAILHOG_HOST');  // MailHogコンテナのホスト名
     $mail->Port = 1025;  // MailHogのSMTPポート
-    $mail->SMTPAuth = false; // SMTP認証なし
     // 文字エンコーディングを設定
     $mail->CharSet = 'UTF-8';
 
