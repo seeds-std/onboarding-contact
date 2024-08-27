@@ -71,7 +71,7 @@
                 <p class="form-check">
                     <?php if (isset($discoveryReason) && is_array($discoveryReason)) {$discoveryReason = implode(', ',$discoveryReason); echo $discoveryReason;}?>
                 </p>
-                <input name="discoveryReason" type="hidden" value="<?= $discoveryReason ?>">
+                <input name="discoveryReason" type="hidden" value="<?=isset($discoveryReason) ? '$discoveryReason' : '' ?>">
             </div>
             <!-- 戻る、送信ボタン  -->
             <div align="center">
