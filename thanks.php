@@ -1,4 +1,5 @@
 <?php
+
 // 実装
 require_once 'private/bootstrap.php';
 require_once 'private/database.php';
@@ -7,10 +8,11 @@ require      'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-//var_dump($_POST);
 //文字エンコードを指定
 mb_language('Japanese');
 mb_internal_encoding('UTF-8');
+
+//var_dump($_POST);
 
 // POSTデータから値を取得
 $fullname = $_POST['fullname'];
@@ -58,10 +60,11 @@ try {
     
     // 送受信先設定
     $mail->addAddress($email, $fullname);
-    
+
     // メールの件名
+    $mail->CharSet = 'UTF-8';
     $mail->Subject = 'お問い合わせフォームからのメッセージ';
-    $mail->setFrom($email, $fullname);
+    $mail->setFrom('test@example.com', 'tester');
     $mail->Body = "
         氏名: $fullname
         フリガナ: $kana
@@ -77,7 +80,6 @@ try {
 
     // メールを送信
     $mail->send();
-    
 } catch (Exception $e) {
     echo "エラーが発生しました：" . $e->getMessage();
 
