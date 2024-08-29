@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y git
 # コンテナが起動した際のデフォルトの動作を定義
 CMD ["bash"]
 
-FROM docker pull mailhog/mailhog:v1.0.1
+FROM mailhog/mailhog:v1.0.1
