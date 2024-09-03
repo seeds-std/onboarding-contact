@@ -20,3 +20,7 @@ services:
       - ./:/var/www/html
     ports:
       - "80:80"
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
