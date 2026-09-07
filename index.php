@@ -6,7 +6,82 @@ require_once 'private/bootstrap.php';
 require_once 'private/database.php';
 
 // 実装
+$errors = [];
+$mode   = 'input';
 
+$name      = $_POST['user_name'] ?? '';
+$furigana  = $_POST['user_namefurigana'] ?? '';
+$email     = $_POST['user_email'] ?? '';
+$gender    = $_POST['gender'] ?? '女性';
+$zip1      = $_POST['zip1'] ?? '';
+$zip2      = $_POST['zip2'] ?? '';
+$pref      = $_POST['pref'] ?? '';
+$juusyo    = $_POST['user_juusyo'] ?? '';
+$others    = $_POST['user_others'] ?? '';
+$buiding   = $_POST['user_buiding'] ?? '';
+$message   = $_POST['message'] ?? '';
+$interests = $_POST['interest'] ?? [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (isset($_POST['btn_confirm'])) {
+
+        if (trim($name) === '') { $errors[] = '氏名を入力してください。'; }
+        if (trim($furigana) === '') { $errors[] = 'フリガナを入力してください。'; }
+        if (trim($email) === '') { $errors[] = 'メールアドレスを入力してください。'; }
+        if (empty($interests)) { $errors[] = '知った理由を1つ以上選択してください。'; }
+        if (trim($message) === '') { $errors[] = 'お問い合わせ内容を入力してください。'; }
+
+        if (empty($errors)) {
+            $mode = 'confirm';
+        }
+
+    } elseif (isset($_POST['btn_submit'])) {
+
+        $zip_code     = $zip1 . '-' . $zip2;
+        $interest_str = implode('、', $interests);
+
+        $db = connectDB();
+
+        $sql = "INSERT INTO bbs.contacts (
+                name, furigana, email, gender, zip_code, pref, city, address, building, message, interest, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+        if ($stmt = $db->prepare($sql)) {
+            $stmt->bind_param(
+                "sssssssssss",
+                $name,
+                $furigana,
+                $email,
+                $gender,
+                $zip_code,
+                $pref,
+                $juusyo,
+                $others,
+                $buiding,
+                $message,
+                $interest_str
+            );
+
+            if ($stmt->execute()) {
+                $stmt->close();
+                $db->close();
+
+                header('Location: thanks.php');
+                exit;
+            } else {
+                $errors[] = '保存処理に失敗しました。';
+            }
+        } else {
+            $errors[] = 'データベースエラーが発生しました。';
+        }
+
+        $mode = 'confirm';
+
+    } elseif (isset($_POST['btn_back'])) {
+        $mode = 'input';
+    }
+}
 ?>
 
 <!-- 描画するHTML -->
@@ -20,40 +95,103 @@ require_once 'private/database.php';
 <body>
 
     <h4><font color="red">※</font>内容は必須項目です</h4>
-    <form action="/submit" method="POST">
+
+    <?php if (!empty($errors)): ?>
+            <ul style="color: red;">
+                <?php foreach ($errors as $error): ?>
+                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                <?php endforeach; ?>
+            </ul>
+    <?php endif; ?>
+
+    <?php if ($mode === 'confirm'): ?>
+        <form action="index.php" method="POST">
+            <table width="500" cellpadding="8">
+                <tr>
+                    <td width="180" align="left">氏名</td>
+                    <td align="left"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left">フリガナ</td>
+                    <td align="left"><?php echo htmlspecialchars($furigana, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left">メールアドレス</td>
+                    <td align="left"><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left">性別</td>
+                    <td align="left"><?php echo htmlspecialchars($gender, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left">都道府県</td>
+                    <td align="left"><?php echo htmlspecialchars($pref, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">知った理由</td>
+                    <td align="left"><?php echo htmlspecialchars(implode('、', $interests), ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">お問い合わせ内容</td>
+                    <td align="left"><?php echo nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')); ?></td>
+                </tr>
+            </table>
+
+            <input type="hidden" name="pref" value="<?php echo htmlspecialchars($pref, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="zip1" value="<?php echo htmlspecialchars($zip1, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="zip2" value="<?php echo htmlspecialchars($zip2, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="user_juusyo" value="<?php echo htmlspecialchars($juusyo, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="user_others" value="<?php echo htmlspecialchars($others, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="user_buiding" value="<?php echo htmlspecialchars($buiding, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php foreach ($interests as $item): ?>
+                <input type="hidden" name="interest[]" value="<?php echo htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php endforeach; ?>
+            <input type="hidden" name="message" value="<?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
+
+            <br>
+            <div align="left">
+                <button type="submit" name="btn_back">修正する</button>
+                &nbsp;&nbsp;
+                <button type="submit" name="btn_submit">送信する</button>
+            </div>
+            
+        </form>
+
+    <?php else: ?>
+        <form action="index.php" method="POST">
         
         <table width="350">
             <tr>
                 
                 <td align="left"><label for="name">氏名</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="name" name="user_name"></td>
+                <td align="right"><input type="text" id="name" name="user_name" required></td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 <td align="left"><label for="namefurigana">フリガナ</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="namefurigana" name="user_namefurigana"></td>
+                <td align="right"><input type="text" id="namefurigana" name="user_namefurigana" required></td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 <td align="left"><label for="email">メールアドレス</label><font color="red">※</font></td>
-                <td align="right"><input type="email" id="email" name="user_email"></td>
+                <td align="right"><input type="email" id="email" name="user_email" required></td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 <td align="left">性別</td>
                 
                 <td align="left">
-                    <label><input type="radio" name="gender" value="female"> 女性</label>
-                    <label><input type="radio" name="gender" value="male"> 男性</label>
+                    <label><input type="radio" name="gender" value="female" required> 女性</label>
+                    <label><input type="radio" name="gender" value="male" required> 男性</label>
                 </td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 <td align="left"><label for="zip1">住所（郵便番号）</label><font color="red">※</font></td>
                 <td align="left">
-                    <input type="text" id="zip1" name="zip1" size="3" maxlength="3">
+                    <input type="text" id="zip1" name="zip1" size="3" maxlength="3" required>
                     -
-                    <input type="text" id="zip2" name="zip2" size="4" maxlength="4">
+                    <input type="text" id="zip2" name="zip2" size="4" maxlength="4" required>
                 </td>
             </tr>
 
@@ -118,14 +256,14 @@ require_once 'private/database.php';
             <tr>
                 
                 <td align="left"><label for="juusyo">住所（市区町村）</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="juusyo" name="user_juusyo"></td>
+                <td align="right"><input type="text" id="juusyo" name="user_juusyo" required></td>
             </tr>
 
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 
                 <td align="left" valign="top"><label for="others">住所（それ以降の住所）</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="others" name="user_others"></td>
+                <td align="right"><input type="text" id="others" name="user_others" required></td>
             </tr>
 
              <tr height="15"><td colspan="2"></td></tr>
@@ -140,27 +278,31 @@ require_once 'private/database.php';
                     <label for="message">お問い合わせ内容</label><font color="red">※</font>
                 </td>
                 <td align="right">
-                    <!-- textarea タグに required を追加 -->
-                    <textarea id="message" name="message" rows="4" cols="18"></textarea>
+                    <textarea id="message" name="message" rows="4" cols="18" required></textarea>
                 </td>
             </tr>
 
              <tr height="15"><td colspan="2"></td></tr>
              <tr>
                <td align="left" valign="top" nowrap>このフォームを知った理由（複数選択可）<font color="red">※</font></td>
-                <td align="left">
-                    <label><input type="checkbox" name="interest" value="family"> 家族から聞いて</label><br>
-                    <label><input type="checkbox" name="interest" value="friend"> 友人から聞いて</label><br>
-                    <label><input type="checkbox" name="interest" value="newspaper"> 新聞</label><br>
-                    <label><input type="checkbox" name="interest" value="radio"> ラジオ</label><br>
-                    <label><input type="checkbox" name="interest" value="web"> Web</label>
+                <td align="left" valign="top" nowrap>
+                    <label><input type="checkbox" name="interest[]" value="family"> 家族から聞いて</label><br>
+                    <label><input type="checkbox" name="interest[]" value="friend"> 友人から聞いて</label><br>
+                    <label><input type="checkbox" name="interest[]" value="newspaper"> 新聞</label><br>
+                    <label><input type="checkbox" name="interest[]" value="radio"> ラジオ</label><br>
+                    <label><input type="checkbox" name="interest[]" value="web"> Web</label>
                 </td>
             </tr>
 
         </table>
         <br>
 
+        <div align="left">
+            <button type="submit" name="btn_confirm">決定</button>
+        </div>
+
     </form>
+    <?php endif; ?>
 
 </body>
 </html>
