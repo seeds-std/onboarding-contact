@@ -67,6 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->close();
                 $db->close();
 
+                mb_language("Japanese");
+                mb_internal_encoding("UTF-8");
+
+                $to      = $email;
+                $subject = "【〇〇】お問い合わせ受け付け完了";
+                $mail_body = "{$name} 様\n\nお問い合わせありがとうございます。\n\n【内容】\n{$message}";
+                $headers = "From: " . mb_encode_mimeheader("お問い合わせ窓口") . " <no-reply@example.com>";
+
+                mb_send_mail($to, $subject, $mail_body, $headers);
+
                 header('Location: thanks.php');
                 exit;
             } else {
@@ -137,6 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </tr>
             </table>
 
+            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="user_namefurigana" value="<?php echo htmlspecialchars($furigana , ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="user_email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="gender" value="<?php echo htmlspecialchars($gender, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="pref" value="<?php echo htmlspecialchars($pref, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="zip1" value="<?php echo htmlspecialchars($zip1, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="zip2" value="<?php echo htmlspecialchars($zip2, ENT_QUOTES, 'UTF-8'); ?>">
@@ -181,8 +195,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td align="left">性別</td>
                 
                 <td align="left">
-                    <label><input type="radio" name="gender" value="female" required> 女性</label>
-                    <label><input type="radio" name="gender" value="male" required> 男性</label>
+                    <label><input type="radio" name="gender" value="女性" required> 女性</label>
+                    <label><input type="radio" name="gender" value="男性" required> 男性</label>
                 </td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
