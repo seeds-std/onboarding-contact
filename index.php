@@ -16,9 +16,9 @@ $gender    = $_POST['gender'] ?? '女性';
 $zip1      = $_POST['zip1'] ?? '';
 $zip2      = $_POST['zip2'] ?? '';
 $pref      = $_POST['pref'] ?? '';
-$juusyo    = $_POST['user_juusyo'] ?? '';
-$others    = $_POST['user_others'] ?? '';
-$buiding   = $_POST['user_buiding'] ?? '';
+$city    = $_POST['user_city'] ?? '';
+$address    = $_POST['user_address'] ?? '';
+$building   = $_POST['user_building'] ?? '';
 $message   = $_POST['message'] ?? '';
 $interests = $_POST['interest'] ?? [];
 
@@ -56,9 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $gender,
                 $zip_code,
                 $pref,
-                $juusyo,
-                $others,
-                $buiding,
+                $city,
+                $address,
+                $building,
                 $message,
                 $interest_str
             );
@@ -154,9 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="pref" value="<?php echo htmlspecialchars($pref, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="zip1" value="<?php echo htmlspecialchars($zip1, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="zip2" value="<?php echo htmlspecialchars($zip2, ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="user_juusyo" value="<?php echo htmlspecialchars($juusyo, ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="user_others" value="<?php echo htmlspecialchars($others, ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="user_buiding" value="<?php echo htmlspecialchars($buiding, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="city" value="<?php echo htmlspecialchars($city, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="address" value="<?php echo htmlspecialchars($address, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="building" value="<?php echo htmlspecialchars($building, ENT_QUOTES, 'UTF-8'); ?>">
             <?php foreach ($interests as $item): ?>
                 <input type="hidden" name="interest[]" value="<?php echo htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?>">
             <?php endforeach; ?>
@@ -269,22 +269,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 
-                <td align="left"><label for="juusyo">住所（市区町村）</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="juusyo" name="user_juusyo" required></td>
+                <td align="left"><label for="city">住所（市区町村）</label><font color="red">※</font></td>
+                <td align="right"><input type="text" id="city" name="user_city" required></td>
             </tr>
 
             <tr height="15"><td colspan="2"></td></tr>
             <tr>
                 
-                <td align="left" valign="top"><label for="others">住所（それ以降の住所）</label><font color="red">※</font></td>
-                <td align="right"><input type="text" id="others" name="user_others" required></td>
+                <td align="left" valign="top"><label for="address">住所（それ以降の住所）</label><font color="red">※</font></td>
+                <td align="right"><input type="text" id="address" name="user_address" required></td>
             </tr>
 
              <tr height="15"><td colspan="2"></td></tr>
              <tr>
                 
-                <td align="left"><label for="buiding">住所（建物）</label></td>
-                <td align="right"><input type="text" id="buiding" name="user_buiding"></td>
+                <td align="left"><label for="building">住所（建物）</label></td>
+                <td align="right"><input type="text" id="building" name="user_building"></td>
             </tr>
             <tr height="15"><td colspan="2"></td></tr>
             <tr>

@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS contacts (
     gender VARCHAR(10) NOT NULL,
     zip_code VARCHAR(10) NOT NULL,
     pref VARCHAR(20) NOT NULL,
-    juusyo VARCHAR(100) NOT NULL,
-    others VARCHAR(255) NOT NULL,
-    buiding VARCHAR(255),
+    city VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    building VARCHAR(255),
     message TEXT NOT NULL,
     interest VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL
