@@ -173,13 +173,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td align="left">都道府県</td>
                     <td align="left"><?php echo htmlspecialchars($pref, ENT_QUOTES, 'UTF-8'); ?></td>
                 </tr>
+
                 <tr>
-                    <td align="left" valign="top">知った理由</td>
-                    <td align="left"><?php echo htmlspecialchars(implode('、', $interests), ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td align="left">住所（郵便番号）</td>
+                    <td align="left">〒<?php echo htmlspecialchars($zip1, ENT_QUOTES, 'UTF-8'); ?>-<?php echo htmlspecialchars($zip2, ENT_QUOTES, 'UTF-8'); ?></td>
                 </tr>
+
+                <tr>
+                    <td align="left">住所（市区町村）</td>
+                    <td align="left"><?php echo htmlspecialchars($city, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+
+                <tr>
+                    <td align="left">住所（それ以降の住所）</td>
+                    <td align="left"><?php echo htmlspecialchars($address, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+
+                <tr>
+                    <td align="left">住所（建物）</td>
+                    <td align="left"><?php echo htmlspecialchars($building, ENT_QUOTES, 'UTF-8'); ?></td>
+                </tr>
+
                 <tr>
                     <td align="left" valign="top">お問い合わせ内容</td>
                     <td align="left"><?php echo nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')); ?></td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">このフォームを知った理由</td>
+                    <td align="left">
+                        <?php foreach ($interests as $item): ?>
+                            <?php echo htmlspecialchars($item, ENT_QUOTES, 'UTF-8'); ?><br>
+                        <?php endforeach; ?>
+                    </td>
                 </tr>
             </table>
 
@@ -336,11 +361,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              <tr>
                <td align="left" valign="top" nowrap>このフォームを知った理由（複数選択可）<font color="red">※</font></td>
                 <td align="left" valign="top" nowrap>
-                    <label><input type="checkbox" name="interest[]" value="family"> 家族から聞いて</label><br>
-                    <label><input type="checkbox" name="interest[]" value="friend"> 友人から聞いて</label><br>
-                    <label><input type="checkbox" name="interest[]" value="newspaper"> 新聞</label><br>
-                    <label><input type="checkbox" name="interest[]" value="radio"> ラジオ</label><br>
-                    <label><input type="checkbox" name="interest[]" value="web"> Web</label>
+                    <label><input type="checkbox" name="interest[]" value="家族から聞いて"> 家族から聞いて</label><br>
+                    <label><input type="checkbox" name="interest[]" value="友人から聞いて"> 友人から聞いて</label><br>
+                    <label><input type="checkbox" name="interest[]" value="新聞"> 新聞</label><br>
+                    <label><input type="checkbox" name="interest[]" value="ラジオ"> ラジオ</label><br>
+                    <label><input type="checkbox" name="interest[]" value="Web"> Web</label>
                 </td>
             </tr>
 
