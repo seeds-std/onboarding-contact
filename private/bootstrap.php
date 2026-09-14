@@ -5,3 +5,4 @@
  * ---------------------------------------- */
 require_once 'exception_handler.php';
 require_once 'helper.php';
+require_once 'private/master.php';

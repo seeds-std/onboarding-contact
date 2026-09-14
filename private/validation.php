@@ -38,6 +38,8 @@ function validateContactForm(array $params): array
 
     if (trim($pref) === '') {
         $errors[] = '都道府県を選択してください。';
+    } elseif (!in_array($pref, getPrefectures(), true)) {
+        $errors[] = '正しい都道府県を選択してください。';
     }
 
     if (trim($city) === '') {
