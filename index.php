@@ -4,6 +4,8 @@
  * ---------------------------------------- */
 require_once 'private/bootstrap.php';
 require_once 'private/database.php';
+require_once 'private/validation.php';
+require_once 'private/mail.php';
 
 // 実装
 $errors = [];
@@ -26,47 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['btn_confirm'])) {
 
-        if (trim($name) === '') {
-            $errors[] = '氏名を入力してください。';
-        }
-
-        if (trim($furigana) === '') {
-            $errors[] = 'フリガナを入力してください。';
-        } elseif (!preg_match('/^[ァ-ヶー\s ]+$/u', $furigana)) {
-            $errors[] = 'フリガナは全角カタカナで入力してください。';
-        }
-
-        if (trim($email) === '') {
-            $errors[] = 'メールアドレスを入力してください。';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = '正しいメールアドレスの形式で入力してください。';
-        }
-
-        if (trim($zip1) === '' || trim($zip2) === '') {
-            $errors[] = '郵便番号を入力してください。';
-        } elseif (!preg_match('/^\d{3}$/', $zip1) || !preg_match('/^\d{4}$/', $zip2)) {
-            $errors[] = '郵便番号は半角数字（3桁・4桁）で入力してください。';
-        }
-
-        if (trim($pref) === '') {
-            $errors[] = '都道府県を選択してください。';
-        }
-
-        if (trim($city) === '') {
-            $errors[] = '住所（市区町村）を入力してください。';
-        }
-
-        if (trim($address) === '') {
-            $errors[] = '住所（それ以降の住所）を入力してください。';
-        }
-
-        if (empty($interests)) {
-            $errors[] = '知った理由を1つ以上選択してください。';
-        }
-
-        if (trim($message) === '') {
-            $errors[] = 'お問い合わせ内容を入力してください。';
-        }
+        $errors = validateContactForm($_POST);
 
         if (empty($errors)) {
             $mode = 'confirm';
@@ -74,55 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } elseif (isset($_POST['btn_submit'])) {
 
-        $zip_code     = $zip1 . '-' . $zip2;
-        $interest_str = implode('、', $interests);
+       if (saveContact($_POST)) {
+            sendCompleteMail($email, $name, $message);
 
-        $db = connectDB();
-
-        $sql = "INSERT INTO bbs.contacts (
-                name, furigana, email, gender, zip_code, pref, city, address, building, message, interest, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-
-        if ($stmt = $db->prepare($sql)) {
-            $stmt->bind_param(
-                "sssssssssss",
-                $name,
-                $furigana,
-                $email,
-                $gender,
-                $zip_code,
-                $pref,
-                $city,
-                $address,
-                $building,
-                $message,
-                $interest_str
-            );
-
-            if ($stmt->execute()) {
-                $stmt->close();
-                $db->close();
-
-                mb_language("Japanese");
-                mb_internal_encoding("UTF-8");
-
-                $to      = $email;
-                $subject = "【〇〇】お問い合わせ受け付け完了";
-                $mail_body = "{$name} 様\n\nお問い合わせありがとうございます。\n\n【内容】\n{$message}";
-                $headers = "From: " . mb_encode_mimeheader("お問い合わせ窓口") . " <no-reply@example.com>";
-
-                mb_send_mail($to, $subject, $mail_body, $headers);
-
-                header('Location: thanks.php');
-                exit;
-            } else {
-                $errors[] = '保存処理に失敗しました。';
-            }
+            header('Location: thanks.php');
+            exit;
         } else {
-            $errors[] = 'データベースエラーが発生しました。';
+            $errors[] = '保存処理に失敗しました。';
+            $mode = 'confirm';
         }
-
-        $mode = 'confirm';
 
     } elseif (isset($_POST['btn_back'])) {
         $mode = 'input';

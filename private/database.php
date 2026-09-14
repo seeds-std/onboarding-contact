@@ -28,3 +28,57 @@ function connectDB()
 
     return $connection;
 }
+
+function saveContact(array $data): bool
+{
+    $db = connectDB();
+    if (!$db) {
+        return false;
+    }
+
+    $name         = $data['user_name'] ?? '';
+    $furigana     = $data['user_namefurigana'] ?? '';
+    $email        = $data['user_email'] ?? '';
+    $gender       = $data['gender'] ?? '女性';
+    $zip1         = $data['zip1'] ?? '';
+    $zip2         = $data['zip2'] ?? '';
+    $pref         = $data['pref'] ?? '';
+    $city         = $data['city'] ?? '';
+    $address      = $data['address'] ?? '';
+    $building     = $data['building'] ?? '';
+    $message      = $data['message'] ?? '';
+    $interests    = $data['interest'] ?? [];
+
+    $zip_code     = $zip1 . '-' . $zip2;
+    $interest_str = implode('、', $interests);
+
+    $sql = "INSERT INTO bbs.contacts (
+            name, furigana, email, gender, zip_code, pref, city, address, building, message, interest, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    if ($stmt = $db->prepare($sql)) {
+        $stmt->bind_param(
+            "sssssssssss",
+            $name,
+            $furigana,
+            $email,
+            $gender,
+            $zip_code,
+            $pref,
+            $city,
+            $address,
+            $building,
+            $message,
+            $interest_str
+        );
+
+        $result = $stmt->execute();
+        $stmt->close();
+        $db->close();
+
+        return $result;
+    }
+
+    $db->close();
+    return false;
+}
